@@ -74,22 +74,6 @@ module FakeFS
     alias_method :safe_unlink, :rm_f
     alias_method :remove_entry_secure, :rm_rf
 
-    def ln(source, dest, options = {})
-      options = { force: false }.merge(options)
-
-      unless options[:force]
-        fail Errno::EPERM, "#{source} or #{dest}" if directory?(source)
-        fail Errno::ENOENT, "#{source} or #{dest}" unless exists?(source)
-        fail Errno::EEXIST, "#{source} or #{dest}" if exists?(dest)
-      end
-
-      source = FileSystem.find(source)
-      dest = FileSystem.add(dest, source.entry.clone)
-      source.link(dest)
-
-      0
-    end
-
     def ln_s(target, path, options = {})
       options = { force: false }.merge(options)
       fail(Errno::EEXIST, path) if FileSystem.find(path) && !options[:force]
