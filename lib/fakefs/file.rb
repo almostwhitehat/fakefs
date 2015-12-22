@@ -297,6 +297,10 @@ module FakeFS
           end
       end
 
+      def ino
+        @fake_file.inode
+      end
+
       def symlink?
         File.symlink?(@file)
       end
