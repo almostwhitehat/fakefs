@@ -197,15 +197,7 @@ module FakeFS
     end
 
     def self.link(source, dest)
-      fail Errno::EPERM, "#{source} or #{dest}" if directory?(source)
-      fail Errno::ENOENT, "#{source} or #{dest}" unless exists?(source)
-      fail Errno::EEXIST, "#{source} or #{dest}" if exists?(dest)
-
-      source = FileSystem.find(source)
-      dest = FileSystem.add(dest, source.entry.clone)
-      source.link(dest)
-
-      0
+      FileUtils.ln(source, dest)
     end
 
     def self.delete(*file_names)
